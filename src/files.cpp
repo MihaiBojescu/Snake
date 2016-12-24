@@ -2,27 +2,21 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include "files.h"
 
-std::string readShader(std::string location)
+std::string readWholeFile(std::string location)
 {
-    std::string output = "", line;
     std::ifstream file;
-
     try
     {
-        file.open(location.c_str ());
+        file.open(location.c_str(), std ::ios::in | std::ios::binary);
     }
     catch(std::string error)
     {
         std::cout<<"Error: " + error;
-        return NULL;
     }
-
-    while(std::getline(file, line))
-        output += line;
-
-    return output;
+    return(std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()));
 }
 
 std::vector<std::string> readScores(std::string location)
@@ -33,7 +27,7 @@ std::vector<std::string> readScores(std::string location)
 
     try
     {
-        file.open(location.c_str ());
+        file.open(location.c_str());
     }
     catch(std::string error)
     {

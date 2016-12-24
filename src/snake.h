@@ -13,8 +13,16 @@ public:
     snake();
     ~snake();
 
+    enum
+    {
+        ok = 0,
+        hit = 1
+    };
+
     void eat(int value);
+    int move(point headPoint);
     int getSize();
+    point getHeadLocation();
 
 private:
     std::vector<point> tail;
