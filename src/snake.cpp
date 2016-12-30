@@ -12,6 +12,9 @@ int snake::getSize()
 
 int snake::move(point newHeadLocation)
 {
+    for(std::vector<point>::iterator i = this->tail.begin() + 1; i != this->tail.end(); i++)
+        if((*i).x == newHeadLocation.x && (*i).y == newHeadLocation.y) return this->hit;
+
     this->tail.erase(this->tail.begin());
     this->tail.push_back(newHeadLocation);
     return this->ok;

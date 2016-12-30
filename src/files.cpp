@@ -2,7 +2,6 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include "files.h"
 
 std::string readWholeFile(std::string location)
@@ -56,6 +55,6 @@ void writeScores(std::string location, std::vector<std::string> scores)
     }
     for(std::vector<std::string>::iterator i = scores.begin(); i < scores.end(); i++)
     {
-        //file<<scores::at(i)<<"\n";
+        file<<*i<<"\n";
     }
 }
