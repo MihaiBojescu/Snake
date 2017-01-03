@@ -1,11 +1,8 @@
 #ifndef SNAKE_H
 #define SNAKE_H
+#include "point.h"
+#include "food.h"
 #include <vector>
-
-struct point
-{
-    int x, y;
-};
 
 class snake
 {
@@ -20,13 +17,21 @@ public:
     };
 
     void eat(int value);
-    int move(point headPoint);
+    void eat(food *foodPiece);
+    void increaseSpeed(int value);
+    int move(point &direction, std::vector<food> &foodVector);
     int getSize();
+    int getSpeed();
+    unsigned getScore();
+    std::vector<point> getTail();
     point getHeadLocation();
 
 private:
     std::vector<point> tail;
     point headLocation;
+    unsigned score;
+    unsigned speed;
+    double timer;
 
     void grow(int value, point location);
 };

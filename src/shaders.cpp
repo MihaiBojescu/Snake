@@ -19,7 +19,7 @@ GLuint loadShaders(std::string vertexPath, std::string fragmentPath)
     const char *vertexSource = vertex.c_str();
     const char *fragmentSource = fragment.c_str();
 
-    #ifndef DEBUG_SHADERS
+    #ifdef DEBUG_SHADERS
         std::cout<<fragmentSource[0];
         std::cout<<vertexSource[0];
     #endif
@@ -75,22 +75,53 @@ std::vector<GLfloat> generateVertexArray(std::vector<point> tail)
 
     for(std::vector<point>::iterator i = tail.begin(); i != tail.end(); i++)
     {
-        floatArray.push_back(-1.0f + (float)(*i).x/GRID_SIZE + aux); //x
-        floatArray.push_back(1.0f - (float)(*i).y/GRID_SIZE - aux); //y
-        floatArray.push_back(-1.0f + (float)((*i).x + 1)/GRID_SIZE + aux); //x
-        floatArray.push_back(1.0f - (float)((*i).y + 1)/GRID_SIZE - aux); //y
-        floatArray.push_back(-1.0f + (float)((*i).x)/GRID_SIZE + aux); //x
-        floatArray.push_back(1.0f - (float)((*i).y + 1)/GRID_SIZE - aux); //y
+        floatArray.push_back(-1.0f + (float)(*i).x/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)(*i).y/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).x + 1)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).y + 1)/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).x)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).y + 1)/GRID_SIZE - aux);
 
-        floatArray.push_back(-1.0f + (float)(*i).x/GRID_SIZE + aux); //x
-        floatArray.push_back(1.0f - (float)(*i).y/GRID_SIZE - aux); //y
-        floatArray.push_back(-1.0f + (float)((*i).x + 1)/GRID_SIZE + aux); //x
-        floatArray.push_back(1.0f - (float)((*i).y)/GRID_SIZE - aux); //y
-        floatArray.push_back(-1.0f + (float)((*i).x + 1)/GRID_SIZE + aux); //x
-        floatArray.push_back(1.0f - (float)((*i).y + 1)/GRID_SIZE - aux); //y
+        floatArray.push_back(-1.0f + (float)(*i).x/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)(*i).y/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).x + 1)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).y)/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).x + 1)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).y + 1)/GRID_SIZE - aux);
     }
 
-    #ifndef DEBUG_SHADERS
+    #ifdef DEBUG_SHADERS
+        for(int i = 0; i < floatArray.size(); i++)
+            std::cout<<floatArray[i]<<", ";
+        std::cout<<"end\n";
+    #endif
+
+    return floatArray;
+}
+
+std::vector<GLfloat> generateVertexArray(std::vector<food> foodVector)
+{
+    std::vector<GLfloat> floatArray;
+    float aux = 0.0f;
+
+    for(std::vector<food>::iterator i = foodVector.begin(); i != foodVector.end(); i++)
+    {
+        floatArray.push_back(-1.0f + (float)(*i).getLocation().x/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)(*i).getLocation().y/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).getLocation().x + 1)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).getLocation().y + 1)/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).getLocation().x)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).getLocation().y + 1)/GRID_SIZE - aux);
+
+        floatArray.push_back(-1.0f + (float)(*i).getLocation().x/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)(*i).getLocation().y/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).getLocation().x + 1)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).getLocation().y)/GRID_SIZE - aux);
+        floatArray.push_back(-1.0f + (float)((*i).getLocation().x + 1)/GRID_SIZE + aux);
+        floatArray.push_back(1.0f - (float)((*i).getLocation().y + 1)/GRID_SIZE - aux);
+    }
+
+    #ifdef DEBUG_SHADERS
         for(int i = 0; i < floatArray.size(); i++)
             std::cout<<floatArray[i]<<", ";
         std::cout<<"end\n";
@@ -118,7 +149,7 @@ std::vector<float> generateVertexArray(point head)
     floatArray.push_back(-1.0f + (float)(head.x + 1)/GRID_SIZE + aux); //x
     floatArray.push_back(1.0f - (float)(head.y + 1)/GRID_SIZE - aux); //y
 
-    #ifndef DEBUG_SHADERS
+    #ifdef DEBUG_SHADERS
         for(int i = 0; i < floatArray.size(); i++)
             std::cout<<floatArray[i]<<", ";
         std::cout<<"end\n";
@@ -138,10 +169,11 @@ void initData(GLuint &vertexBuffer, GLuint &vertexArrayID, std::vector<GLfloat> 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 }
 
-void refreshAndDraw(GLuint program, std::vector<GLfloat> buffer)
+void refreshAndDraw(GLuint &program, GLuint &vertexBuffer, std::vector<GLfloat> buffer)
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(program);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferSubData(GL_ARRAY_BUFFER, 0, buffer.size() * sizeof(GLfloat), &buffer[0]);
 
     glEnableVertexAttribArray(0);
