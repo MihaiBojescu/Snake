@@ -26,6 +26,12 @@ private:
     std::vector<snake> snakes;
     std::vector<food> foodPieces;
     std::vector<unsigned> scores;
+
+	GLuint vertexBufferIdentifier;
+	GLuint vertexBuffer;
+	GLuint program;
+
+	void initData();
 };
 
 #endif

@@ -15,6 +15,9 @@ game::game()
     this->directions.push_back(direction);
     this->foodPieces.push_back(foodPiece);
     this->scores.push_back(newSnake.getScore());
+
+    this->generateVertices();
+    this->initData();
 }
 
 game::game(unsigned snakeNumber)
@@ -29,6 +32,9 @@ game::game(unsigned snakeNumber)
     }
     food foodPiece;
     this->foodPieces.push_back(foodPiece);
+
+    this->generateVertices();
+    this->initData();
 }
 
 game::game(unsigned snakeNumber, unsigned foodPieces)
@@ -46,6 +52,9 @@ game::game(unsigned snakeNumber, unsigned foodPieces)
         food foodPiece;
         this->foodPieces.push_back(foodPiece);
     }
+
+    this->generateVertices();
+    this->initData();
 }
 
 game::~game()
@@ -54,6 +63,7 @@ game::~game()
     this->directions.clear();
     this->scores.clear();
     this->foodPieces.clear();
+    cleanUp(this->vertexBuffer, this->vertexBufferIdentifier, this->program);
 }
 
 void game::setDirection(point newDirection)
@@ -98,6 +108,8 @@ void game::generateFoodPiece(unsigned value)
 
 void game::drawGame()
 {
+    //initOpenGLData(this->vertexBuffer, this->vertexBufferIdentifier, this->vertices);
+    refreshAndDraw(this->program, this->vertexBuffer, this->vertices);
 }
 
 int game::gameLoop()
@@ -126,4 +138,10 @@ std::vector<unsigned> game::getScores()
 std::vector<GLfloat> game::getVertices()
 {
     return this->vertices;
+}
+
+void game::initData()
+{
+	this->program = loadShaders("./src/glsl/snakeVertex.glsl", "./src/glsl/snakeFragment.glsl");
+	initOpenGLData(this->vertexBuffer, this->vertexBufferIdentifier, this->vertices);
 }

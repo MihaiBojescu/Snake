@@ -31,7 +31,7 @@ void snake::eat(int value)
 void snake::eat(food *foodPiece)
 {
     this->grow(foodPiece->getValue(), this->headLocation);
-    if(foodPiece->getValue() == 1) this->increaseSpeed(200);
+    if(foodPiece->getValue() == 1) this->increaseSpeed(10);
     this->score++;
 }
 
@@ -73,15 +73,14 @@ int snake::move(point &direction, std::vector<food> &foodVector)
             direction.y = this->tail.back().y - this->tail[this->tail.size() - 2].y;
         }
 
-
-        if(this->headLocation.x + direction.x >= GRID_SIZE * 2)
-            this->headLocation.x = 0;
-        if(this->headLocation.x + direction.x <= 0)
-            this->headLocation.x = GRID_SIZE * 2 - 1;
-        if(this->headLocation.y + direction.y >= GRID_SIZE * 2)
-            this->headLocation.y = 0;
-        if(this->headLocation.y + direction.y <= 0)
-            this->headLocation.y = GRID_SIZE * 2 - 1;
+        if(this->headLocation.x + direction.x > GRID_SIZE * 2)
+            this->headLocation.x = -1;
+        if(this->headLocation.x + direction.x < 0)
+            this->headLocation.x = GRID_SIZE * 2;
+        if(this->headLocation.y + direction.y > GRID_SIZE * 2)
+            this->headLocation.y = -1;
+        if(this->headLocation.y + direction.y < 0)
+            this->headLocation.y = GRID_SIZE * 2;
 
         this->headLocation = this->headLocation + direction;
         for(std::vector<point>::iterator i = this->tail.begin() + 1; i != this->tail.end(); i++)
@@ -105,6 +104,7 @@ int snake::move(point &direction, std::vector<food> &foodVector)
 void snake::grow(int value, point location)
 {
     this->tail.push_back(location);
+    if(value == 1) this->increaseSpeed(10);
 }
 
 std::vector<point> snake::getTail()

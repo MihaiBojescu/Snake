@@ -5,15 +5,15 @@
 food::food()
 {
     this->value = rand() % 5;
-    this->location.x = rand() % GRID_SIZE;
-    this->location.y = rand() % GRID_SIZE;
+    this->location.x = -1 + rand() % GRID_SIZE * 2;
+    this->location.y = -1 + rand() % GRID_SIZE * 2;
 }
 
 food::food(unsigned value)
 {
     this->value = value;
-    this->location.x = rand() % GRID_SIZE;
-    this->location.y = rand() % GRID_SIZE;
+    this->location.x = -1 + rand() % GRID_SIZE * 2;
+    this->location.y = -1 + rand() % GRID_SIZE * 2;
 }
 
 food::food(point location, unsigned value)
