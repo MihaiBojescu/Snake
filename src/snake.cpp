@@ -1,6 +1,8 @@
-#include "snake.h"
-#include "point.cpp"
-#include "food.cpp"
+#include "../includes/snake.h"
+#include "../includes/point.h"
+#include "../includes/food.h"
+/*#include "point.cpp"
+#include "food.cpp"*/
 #include <ctime>
 #ifdef DEBUG
 #include <iostream>

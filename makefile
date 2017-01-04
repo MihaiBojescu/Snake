@@ -1,9 +1,9 @@
-SRCDIR=./src
+SRCDIR=src/*.cpp
+INCLUDEDIR=includes/*.h
 BUILDDIR=./build
 
 CC=g++
-LD=g++
-GLLIBS=-lGL -lglut
+GLLIBS=-lGL -lGLU -lGLEW -lglfw
 
 TARGET=Snake
 
@@ -11,8 +11,8 @@ TARGET=Snake
 all: $(TARGET)
 
 $(TARGET):
-	$(CC) $(SRCDIR)/* $(GLLIBS) -o $(BUILDDIR)/$@
-
+	$(CC) -I$(INCLUDEDIR) $(SRCDIR) $(GLLIBS) -o $(BUILDDIR)/$@
+    
 .PHONY: clean
 clean:
 	rm -f $(BUILDDIR)/$(TARGET) $(OBJECTS)

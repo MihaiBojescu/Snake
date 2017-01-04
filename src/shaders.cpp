@@ -1,6 +1,9 @@
-#include "shaders.h"
-#include "files.cpp"
+#include "../includes/shaders.h"
+#include "../includes/files.h"
+/*#include "files.cpp"*/
 #include <string>
+#include <GL/gl.h>
+#include <GL/glext.h>
 #include <GL/glew.h>
 
 #ifdef DEBUG_SHADERS

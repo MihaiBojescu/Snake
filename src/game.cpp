@@ -1,6 +1,6 @@
-#include "game.h"
-#include "snake.cpp"
-#include "shaders.cpp"
+#include "../includes/game.h"
+#include "../includes/snake.h"
+#include "../includes/shaders.h"
 #include <vector>
 #ifdef DEBUG
 #include <iostream>

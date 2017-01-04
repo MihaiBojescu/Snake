@@ -1,6 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
-#include "snake.h"
+#include "../includes/snake.h"
 #include <GLFW/glfw3.h>
 #include <vector>
 

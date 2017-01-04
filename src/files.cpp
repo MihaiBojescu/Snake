@@ -2,7 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include "files.h"
+#include "../includes/files.h"
 
 std::string readWholeFile(std::string location)
 {

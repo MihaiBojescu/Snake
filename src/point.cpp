@@ -1,4 +1,4 @@
-#include "point.h"
+#include "../includes/point.h"
 
 point point::operator+(const point &newPoint)
 {

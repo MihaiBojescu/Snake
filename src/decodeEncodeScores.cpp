@@ -1,4 +1,4 @@
-#include "decodeEncodeScores.h"
+#include "../includes/decodeEncodeScores.h"
 
 char decode(int number)
 {

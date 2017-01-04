@@ -2,6 +2,9 @@
 #define SNAKE_H
 #include "point.h"
 #include "food.h"
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
 #include <vector>
 
 class snake

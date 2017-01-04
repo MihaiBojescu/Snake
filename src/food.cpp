@@ -1,5 +1,5 @@
-#include "food.h"
-#include "point.h"
+#include "../includes/food.h"
+#include "../includes/point.h"
 #include <cstdlib>
 
 food::food()
