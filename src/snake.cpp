@@ -1,9 +1,8 @@
 #include "../includes/snake.h"
 #include "../includes/point.h"
 #include "../includes/food.h"
-/*#include "point.cpp"
-#include "food.cpp"*/
 #include <ctime>
+#include <cstdlib>
 #ifdef DEBUG
 #include <iostream>
 #endif
@@ -11,36 +10,40 @@
 snake::snake()
 {
     this->headLocation = (point){5, 6};
-    this->grow(0, (point){3, 6});
-    this->grow(0, (point){4, 6});
-    this->grow(0, (point){5, 6});
-    this->speed = 100;
+    this->grow((point){3, 6});
+    this->grow((point){4, 6});
+    this->grow((point){5, 6});
+    this->speed = 50;
     this->score = 0;
     this->timer = std::clock();
+
+    srand(clock());
+    this->colors.push_back((float)(rand() % 1000) / 1000);
+    this->colors.push_back((float)(rand() % 1000) / 1000);
+    this->colors.push_back((float)(rand() % 1000) / 1000);
+
+    #ifdef DEBUG
+        std::cout<<"Snake colors: ";
+        for(std::vector<GLfloat>::iterator i = this->colors.begin(); i != this->colors.end(); i++)
+        {
+            std::cout<<(*i)<<", ";
+        }
+        std::cout<<"\n";
+    #endif
 }
 
 snake::~snake()
 {
+    this->tail.clear();
+    this->colors.clear();
 }
 
 void snake::eat(int value)
 {
-    this->grow(value, this->headLocation);
-    if(value == 1) this->increaseSpeed(200);
+    this->grow(this->headLocation);
+    if(value == 1) this->increaseSpeed(10);
+    if(value == 2) this->increaseSpeed(-10);
     this->score++;
-}
-
-void snake::eat(food *foodPiece)
-{
-    this->grow(foodPiece->getValue(), this->headLocation);
-    if(foodPiece->getValue() == 1) this->increaseSpeed(10);
-    this->score++;
-}
-
-void snake::increaseSpeed(int value)
-{
-    if(this->speed + value > 99) this->speed += value;
-    else this->speed = 100;
 }
 
 int snake::getSize()
@@ -56,6 +59,21 @@ int snake::getSpeed()
 unsigned snake::getScore()
 {
     return this->score;
+}
+
+std::vector<point> snake::getTail()
+{
+    return this->tail;
+}
+
+std::vector<GLfloat> snake::getColors()
+{
+    return this->colors;
+}
+
+point snake::getHeadLocation()
+{
+    return this->headLocation;
 }
 
 int snake::move(point &direction, std::vector<food> &foodVector)
@@ -95,7 +113,7 @@ int snake::move(point &direction, std::vector<food> &foodVector)
         for(std::vector<food>::iterator i = foodVector.begin(); i != foodVector.end() && stop == false; i++)
             if((*i).getLocation() == this->headLocation)
             {
-                this->grow((*i).getValue(), (*i).getLocation());
+                this->processFood(*i);
                 foodVector.erase(i);
                 stop = true;
             }
@@ -103,18 +121,52 @@ int snake::move(point &direction, std::vector<food> &foodVector)
     return this->ok;
 }
 
-void snake::grow(int value, point location)
+
+void snake::processFood(food foodPiece)
+{
+    switch(foodPiece.getValue())
+    {
+        case 0:
+            this->grow(foodPiece.getLocation());
+            this->score++;
+            break;
+
+        case 1:
+            this->grow(foodPiece.getLocation());
+            this->increaseSpeed(5);
+            this->score++;
+            break;
+
+        case 2:
+            this->grow(foodPiece.getLocation());
+            this->increaseSpeed(-5);
+            this->score++;
+            break;
+
+        case 3:
+            this->increaseSpeed(-1000);
+            this->shrink();
+            this->score > 0 ? this->score-- : this->score;
+            break;
+
+        default:
+            this->grow(foodPiece.getLocation());
+    }
+}
+
+void snake::increaseSpeed(int value)
+{
+    if(this->speed + value > 49) this->speed += value;
+    else this->speed = 50;
+}
+
+void snake::grow(point location)
 {
     this->tail.push_back(location);
-    if(value == 1) this->increaseSpeed(10);
 }
 
-std::vector<point> snake::getTail()
+void snake::shrink()
 {
-    return this->tail;
-}
-
-point snake::getHeadLocation()
-{
-    return this->headLocation;
+    if(this->tail.size() > 1)
+        this->tail.erase(this->tail.begin());
 }

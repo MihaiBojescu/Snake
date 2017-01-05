@@ -15,4 +15,4 @@ $(TARGET):
     
 .PHONY: clean
 clean:
-	rm -f $(BUILDDIR)/$(TARGET) $(OBJECTS)
+	rm -f $(BUILDDIR)/$(TARGET)

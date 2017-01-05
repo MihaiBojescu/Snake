@@ -1,9 +1,8 @@
 #version 400
 
-out vec4 frag_colour;
+in vec3 vertexColor;
+out vec4 outputColor;
 
-void main()
-{
-    frag_colour = vec4(0.8, 0, 0.0, 1.0);
+void main() {
+  outputColor = vec4(vertexColor, 1.0);
 }
-

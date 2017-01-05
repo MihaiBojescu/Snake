@@ -17,6 +17,7 @@ game::game()
     this->scores.push_back(newSnake.getScore());
 
     this->generateVertices();
+    this->generateColors();
     this->initData();
 }
 
@@ -34,6 +35,7 @@ game::game(unsigned snakeNumber)
     this->foodPieces.push_back(foodPiece);
 
     this->generateVertices();
+    this->generateColors();
     this->initData();
 }
 
@@ -54,7 +56,26 @@ game::game(unsigned snakeNumber, unsigned foodPieces)
     }
 
     this->generateVertices();
+    this->generateColors();
     this->initData();
+
+    #ifdef DEBUG
+        std::cout<<"colors: ";
+        for(unsigned i = 0; i < this->colors.size(); i++)
+        {
+            if(i % 3 == 0) std::cout<<"\n"<<i / 3<<": ";
+            std::cout<<this->colors[i]<<", ";
+        }
+        std::cout<<"\n";
+
+        std::cout<<"vertices: ";
+        for(unsigned i = 0; i < this->vertices.size(); i++)
+        {
+            if(i % 2 == 0) std::cout<<"\n"<<i / 2<<": ";
+            std::cout<<this->vertices[i]<<", ";
+        }
+        std::cout<<"\n";
+    #endif
 }
 
 game::~game()
@@ -63,7 +84,7 @@ game::~game()
     this->directions.clear();
     this->scores.clear();
     this->foodPieces.clear();
-    cleanUp(this->vertexBuffer, this->vertexBufferIdentifier, this->program);
+    cleanUp(this->vertexBuffer, this->colorBuffer, this->vertexArrayObject, this->program);
 }
 
 void game::setDirection(point newDirection)
@@ -94,6 +115,32 @@ void game::generateVertices()
     this->vertices = returnVector;
 }
 
+void game::generateColors()
+{
+    std::vector<GLfloat> returnVector;
+    std::vector<GLfloat> colors;
+
+    for(std::vector<snake>::iterator i = this->snakes.begin(); i != this->snakes.end(); i++)
+    {
+        for(unsigned j = 0; j < (*i).getTail().size() * 6; j++)
+        {
+            colors = (*i).getColors();
+            returnVector.insert(returnVector.end(), colors.begin(), colors.end());
+            colors.clear();
+        }
+    }
+    for(std::vector<food>::iterator i = this->foodPieces.begin(); i != this->foodPieces.end(); i++)
+    {
+        for(unsigned j = 0; j < 6; j++)
+        {
+            colors = (*i).getColors();
+            returnVector.insert(returnVector.end(), colors.begin(), colors.end());
+            colors.clear();
+        }
+    }
+    this->colors = returnVector;
+}
+
 void game::generateFoodPiece()
 {
     food foodPiece;
@@ -108,8 +155,7 @@ void game::generateFoodPiece(unsigned value)
 
 void game::drawGame()
 {
-    //initOpenGLData(this->vertexBuffer, this->vertexBufferIdentifier, this->vertices);
-    refreshAndDraw(this->program, this->vertexBuffer, this->vertices);
+    refreshAndDraw(this->program, this->vertexBuffer, this->colorBuffer, this->vertexArrayObject, this->vertices, this->colors);
 }
 
 int game::gameLoop()
@@ -125,6 +171,7 @@ int game::gameLoop()
     {
         this->scores[0] = this->snakes[0].getScore();
         this->generateVertices();
+        this->generateColors();
     }
 
     return 0;
@@ -143,5 +190,5 @@ std::vector<GLfloat> game::getVertices()
 void game::initData()
 {
 	this->program = loadShaders("./src/glsl/snakeVertex.glsl", "./src/glsl/snakeFragment.glsl");
-	initOpenGLData(this->vertexBuffer, this->vertexBufferIdentifier, this->vertices);
+	initOpenGLData(this->vertexBuffer, this->colorBuffer, this->vertexArrayObject);
 }
