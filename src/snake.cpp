@@ -1,5 +1,5 @@
 #include "../includes/snake.h"
-#include "../includes/point.h"
+#include "../includes/dataTypes.h"
 #include "../includes/food.h"
 #include <ctime>
 #include <cstdlib>
@@ -127,30 +127,30 @@ void snake::processFood(food foodPiece)
     switch(foodPiece.getValue())
     {
         case 0:
-            this->grow(foodPiece.getLocation());
+            this->grow();
             this->score++;
             break;
 
         case 1:
-            this->grow(foodPiece.getLocation());
-            this->increaseSpeed(5);
+            this->grow();
+            this->increaseSpeed(1);
             this->score++;
             break;
 
         case 2:
-            this->grow(foodPiece.getLocation());
-            this->increaseSpeed(-5);
+            this->grow();
+            this->increaseSpeed(-1);
             this->score++;
             break;
 
         case 3:
-            this->increaseSpeed(-1000);
+            this->increaseSpeed(-10);
             this->shrink();
             this->score > 0 ? this->score-- : this->score;
             break;
 
         default:
-            this->grow(foodPiece.getLocation());
+            this->grow();
     }
 }
 
@@ -163,6 +163,11 @@ void snake::increaseSpeed(int value)
 void snake::grow(point location)
 {
     this->tail.push_back(location);
+}
+
+void snake::grow()
+{
+    this->tail.insert(this->tail.begin(), this->tail.front());
 }
 
 void snake::shrink()

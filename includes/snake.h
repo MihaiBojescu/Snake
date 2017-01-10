@@ -1,6 +1,6 @@
 #ifndef SNAKE_H
 #define SNAKE_H
-#include "point.h"
+#include "dataTypes.h"
 #include "food.h"
 #include <GL/glew.h>
 #include <GL/gl.h>
@@ -39,6 +39,7 @@ private:
     void processFood(food foodPiece);
     void increaseSpeed(int value);
     void grow(point location);
+    void grow();
     void shrink();
 };
 

@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include "snake.h"
+#include "shaders.h"
 #include <GLFW/glfw3.h>
 #include <vector>
 
@@ -13,14 +14,15 @@ public:
     ~game();
 
     void setDirection(point newDirection);
-    void generateVertices();
-    void generateColors();
     void generateFoodPiece();
     void generateFoodPiece(unsigned value);
     void drawGame();
     int gameLoop();
     std::vector<unsigned> getScores();
     std::vector<GLfloat> getVertices();
+    std::vector<snake> getSnakes();
+    std::vector<food> getFoods();
+
 private:
     std::vector<GLfloat> vertices;
     std::vector<GLfloat> colors;
@@ -29,12 +31,15 @@ private:
     std::vector<food> foodPieces;
     std::vector<unsigned> scores;
 
-    GLuint vertexArrayObject;
-    GLuint vertexBuffer;
-    GLuint colorBuffer;
-    GLuint program;
+    shader *shaderProgram;
 
-    void initData();
+    GLuint vertexArrayObject;
+    GLuint vertexBufferObject;
+    GLuint colorBufferObject;
+
+    void initGraphicsData();
+    void generateVertices();
+    void generateColors();
 };
 
 #endif

@@ -1,6 +1,6 @@
 #ifndef FOOD_H
 #define FOOD_H
-#include "point.h"
+#include "dataTypes.h"
 #include <vector>
 #include <GL/glew.h>
 
@@ -15,6 +15,7 @@ public:
     unsigned getValue();
     point getLocation();
     std::vector<GLfloat> getColors();
+
 private:
     std::vector<GLfloat> colors;
     point location;

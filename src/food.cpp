@@ -1,5 +1,5 @@
 #include "../includes/food.h"
-#include "../includes/point.h"
+#include "../includes/dataTypes.h"
 #include <ctime>
 #include <cstdlib>
 #ifdef DEBUG
