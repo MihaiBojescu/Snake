@@ -9,10 +9,11 @@
 
 snake::snake()
 {
-    this->headLocation = (point){5, 6};
-    this->grow((point){3, 6});
-    this->grow((point){4, 6});
-    this->grow((point){5, 6});
+    std::srand(std::clock());
+    this->headLocation = (point){rand() % (GRID_SIZE - 6) + 3, rand() % (GRID_SIZE - 6) + 3};
+    this->grow((point){this->headLocation.x - 2, this->headLocation.y});
+    this->grow((point){this->headLocation.x - 1, this->headLocation.y});
+    this->grow((point){this->headLocation.x, this->headLocation.y});
     this->speed = 50;
     this->score = 0;
     this->timer = std::clock();
@@ -87,7 +88,7 @@ int snake::move(point &direction, std::vector<food> &foodVector)
         if((this->headLocation + direction) == this->tail[this->tail.size() - 2])
         {
             #ifdef DEBUG
-                std::cout<<"Snake wants to go back. Preventing this.\n";
+           //     std::cout<<"Snake wants to go back. Preventing this.\n";
             #endif
             direction.x = this->tail.back().x - this->tail[this->tail.size() - 2].x;
             direction.y = this->tail.back().y - this->tail[this->tail.size() - 2].y;

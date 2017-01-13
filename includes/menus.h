@@ -67,7 +67,7 @@ private:
     int x;
     int y;
     unsigned numberOfItems;
-    unsigned currentItem;
+    int currentItem;
     float unselectedColors[3];
     float selectedColors[3];
     menuItem *title;

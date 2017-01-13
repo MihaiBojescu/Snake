@@ -2,24 +2,11 @@
 #include "../includes/snake.h"
 #include "../includes/shaders.h"
 #include <vector>
+#include <ctime>
+#include <cstdlib>
 #ifdef DEBUG
 #include <iostream>
 #endif
-
-game::game()
-{
-    snake newSnake;
-    point direction = {0, 0};
-    food foodPiece;
-    this->snakes.push_back(newSnake);
-    this->directions.push_back(direction);
-    this->foodPieces.push_back(foodPiece);
-    this->scores.push_back(newSnake.getScore());
-
-    this->generateVertices();
-    this->generateColors();
-    this->initGraphicsData();
-}
 
 game::game(unsigned snakeNumber)
 {
@@ -31,25 +18,9 @@ game::game(unsigned snakeNumber)
         this->directions.push_back(direction);
         this->scores.push_back(newSnake.getScore());
     }
-    food foodPiece;
-    this->foodPieces.push_back(foodPiece);
 
-    this->generateVertices();
-    this->generateColors();
-    this->initGraphicsData();
-}
-
-game::game(unsigned snakeNumber, unsigned foodPieces)
-{
-    for(unsigned i = 0; i < snakeNumber; i++)
-    {
-        snake Snake;
-        point direction = {0, 0};
-        this->snakes.push_back(Snake);
-        this->directions.push_back(direction);
-        this->scores.push_back(Snake.getScore());
-    }
-    for(unsigned i = 0; i < foodPieces; i++)
+    std::srand(std::clock());
+    for(int i = rand() % 3 + 3; i > 0; i--)
     {
         food foodPiece;
         this->foodPieces.push_back(foodPiece);
@@ -149,17 +120,19 @@ int game::gameLoop()
     if(this->snakes.empty()) return 1;
     if(this->foodPieces.empty()) this->generateFoodPiece();
 
-    if(this->snakes[0].move(this->directions[0], this->foodPieces) == 1 && (directions[0].x + directions[0].y) != 0)
+    for(int i = 0; i < this->snakes.size(); i++)
     {
-        this->snakes.erase(this->snakes.begin());
+        if(this->snakes[i].move(this->directions[i], this->foodPieces) == 1 && (directions[i].x + directions[i].y) != 0)
+        {
+            this->snakes.erase(this->snakes.begin());
+        }
+        else
+        {
+            this->scores[i] = this->snakes[i].getScore();
+            this->generateVertices();
+            this->generateColors();
+        }
     }
-    else
-    {
-        this->scores[0] = this->snakes[0].getScore();
-        this->generateVertices();
-        this->generateColors();
-    }
-
     return 0;
 }
 

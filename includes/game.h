@@ -8,9 +8,7 @@
 class game
 {
 public:
-    game();
     game(unsigned snakeNumber);
-    game(unsigned snakeNumber, unsigned foodPieces);
     ~game();
 
     void setDirection(point newDirection);

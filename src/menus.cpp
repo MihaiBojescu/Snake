@@ -6,7 +6,7 @@ menuItem::menuItem(std::string text, int fontSize, float scale)
 {
     this->menuItemText = text;
     this->scale = scale;
-    this->textPainter = new textHelper("/usr/share/fonts/TTF/DejaVuSans.ttf", fontSize);
+    this->textPainter = new textHelper("/usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf", fontSize);
 }
 
 menuItem::~menuItem()
@@ -18,8 +18,6 @@ void menuItem::draw(float x, float y, float colors[3])
 {
     this->textPainter->renderTextAt(this->menuItemText, x, y, this->scale, colors);
 }
-
-//----------------------------------------------------
 
 menuItemList::linkedList::linkedList()
 {
@@ -101,8 +99,6 @@ unsigned menuItemList::size()
     return this->numberOfItems;
 }
 
-//----------------------------------------------------
-
 menu::menu( float startX,
             float startY,
             float unselectedColors[3],
@@ -179,11 +175,20 @@ void menu::selectItem(int counter)
 {
     if(numberOfItems == 0) return;
     if(this->currentItem + counter > 0 && this->currentItem + counter < this->numberOfItems)
+    {
         this->currentItem += counter;
+        std::cout<<"first case\n";
+    }
     else if(this->currentItem + counter < 0)
-        this->currentItem = this->numberOfItems;
+    {
+        this->currentItem = this->numberOfItems - 1;
+        std::cout<<"second case\n";
+    }
     else
+    {
         this->currentItem = 0;
+        std::cout<<"third case\n";
+    }
 }
 
 void menu::setDisabled(bool value)

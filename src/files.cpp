@@ -40,21 +40,18 @@ std::vector<std::string> readScores(std::string location)
     return output;
 }
 
-void writeScores(std::string location, std::vector<std::string> scores)
+void writeScores(std::string location, std::string score)
 {
     std::ofstream file;
 
     try
     {
-        file.open(location.c_str());
+        file.open(location.c_str(), std::ios_base::app);
     }
     catch(std::string error)
     {
         std::cout<<"Error: " + error;
         return;
     }
-    for(std::vector<std::string>::iterator i = scores.begin(); i < scores.end(); i++)
-    {
-        file<<*i<<"\n";
-    }
+    file<<score<<"\n";
 }

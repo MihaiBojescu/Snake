@@ -94,3 +94,4 @@ void food::generateColor()
             this->colors.push_back(1.000f);
     }
 }
+

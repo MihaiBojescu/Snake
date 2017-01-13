@@ -6,6 +6,6 @@
 
 std::string readWholeFile(std::string location);
 std::vector<std::string> readScores(std::string location);
-void writeScores(std::string);
+void writeScores(std::string location, std::string score);
 
 #endif

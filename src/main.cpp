@@ -2,24 +2,35 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "../includes/game.h"
-#include "../includes/AI.h"
+#include "../includes/scores.h"
 #include "../includes/menus.h"
+#include "../includes/files.h"
 
 GLFWwindow* window;
 game *Game;
 menu *mainMenu;
-menu *scores;
+menu *score;
+textHelper *scorePrinter;
+scores *scoreBoard;
+
+float unselectedColors[3] = {0.7f, 0.7f, 0.7f};
+float selectedColors[3] = {0.9f, 0.5f, 0.2f};
+
+int minBetween(int a, int b)
+{
+    return a > b ? b : a;
+}
 
 void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mods)
 {
     if(key == GLFW_KEY_UP && action == GLFW_PRESS)
-        if(mainMenu->getDisabled() == true && scores->getDisabled() == true)
+        if(mainMenu->getDisabled() == true && score->getDisabled() == true)
             Game->setDirection((point){0, -1});
         else if(mainMenu->getDisabled() == false)
             mainMenu->selectItem(-1);
 
     if(key == GLFW_KEY_DOWN && action == GLFW_PRESS)
-        if(mainMenu->getDisabled() == true && scores->getDisabled() == true)
+        if(mainMenu->getDisabled() == true && score->getDisabled() == true)
             Game->setDirection((point){0, 1});
         else if(mainMenu->getDisabled() == false)
             mainMenu->selectItem(1);
@@ -35,17 +46,30 @@ void key_callback(GLFWwindow* window, int key, int scanCode, int action, int mod
             switch(mainMenu->getSelectedItem())
             {
                 case 0:
+                    Game = new game(1);
+                    mainMenu->setDisabled(true);
+                    score->setDisabled(true);
                     break;
                 case 1:
+                    delete score;
+                    score = new menu(20, 600, unselectedColors, unselectedColors);
+                    score->addItem("Scores");
+
+                    scoreBoard = new scores("game.scoreBoard");
+                    for(int i = 0; i < (scoreBoard->getScores().size() < 6 ? scoreBoard->getScores().size() : 6); i++)
+                        score->addItem(scoreBoard->getScores()[i]);
+                    delete scoreBoard;
+
                     mainMenu->setDisabled(true);
-                    scores->setDisabled(false);
+                    score->setDisabled(false);
                     break;
                 case 2:
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
                     break;
             }
-        else if(scores->getDisabled() == false)
+        else if(score->getDisabled() == false)
         {
-            scores->setDisabled(false);
+            score->setDisabled(true);
             mainMenu->setDisabled(false);
         }
 
@@ -97,9 +121,6 @@ int main(int argc, char **argv)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    float unselectedColors[3] = {0.7f, 0.7f, 0.7f};
-    float selectedColors[3] = {1.0f, 1.0f, 1.0f};
-
     mainMenu = new menu(20, 600, unselectedColors, selectedColors);
     mainMenu->addItem("Main menu");
     mainMenu->addItem("Play");
@@ -107,39 +128,50 @@ int main(int argc, char **argv)
     mainMenu->addItem("Exit");
     mainMenu->setDisabled(false);
 
-    scores = new menu(20, 600, unselectedColors, unselectedColors);
-    scores->addItem("Scores");
-    scores->setDisabled(true);
+    score = new menu(20, 600, unselectedColors, unselectedColors);
+    score->addItem("Scores");
+    score->setDisabled(true);
 
-    Game = new game(1, 3);
+    scorePrinter = new textHelper("/usr/share/fonts/TTF/DejaVuSansMono-Bold.ttf", 20);
 
 	do{
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	    glClear(GL_COLOR_BUFFER_BIT);
-        if(Game->gameLoop() == 1)
-        {
-            std::cout<<"Score: "<<Game->getScores()[0]<<".\n";
-            delete Game;
-            Game = NULL;
+	    if(Game != NULL)
+	    {
+            if(Game->gameLoop() == 1)
+            {
+                writeScores("game.scoreBoard", "User " + std::to_string(Game->getScores()[0]));
+                delete Game;
+
+                Game = NULL;
+                mainMenu->setDisabled(false);
+            }
+            else
+            {
+                Game->drawGame();
+                scorePrinter->renderTextAt("Score: " + std::to_string(Game->getScores()[0]), 0, 780, 1, unselectedColors);
+            }
         }
         else
         {
-            Game->drawGame();
             mainMenu->draw();
-            scores->draw();
+            score->draw();
         }
+
         glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	while(glfwWindowShouldClose(window) == 0 && Game != NULL);
+	while(glfwWindowShouldClose(window) == 0);
 
     if(Game != NULL)
     {
-        std::cout<<"Score: "<<Game->getScores()[0]<<".\n";
+        writeScores("game.scoreBoard", "User " + std::to_string(Game->getScores()[0]));
         delete Game;
-        delete mainMenu;
-        delete scores;
     }
+
+    delete mainMenu;
+    delete score;
 	glfwTerminate();
 
 	return 0;
