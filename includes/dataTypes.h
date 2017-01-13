@@ -14,12 +14,6 @@ class shader;
 class point;
 class textHelper;
 
-struct direction
-{
-    int x;
-    int y;
-};
-
 class point
 {
 public:
