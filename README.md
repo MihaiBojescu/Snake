@@ -1,6 +1,6 @@
 # Snake in OpenGL
 ## Prerequisites:
-For compilation `gcc`, `glfw` libraries, `glew` libraries, `mesa` libraries are needed.
+For compilation `gcc`, `glfw` libraries, `glew` libraries, `freetype` libraries, `mesa` libraries are needed.
 
 ## Compilation
 Run `make` in the root directory.

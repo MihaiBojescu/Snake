@@ -175,20 +175,11 @@ void menu::selectItem(int counter)
 {
     if(numberOfItems == 0) return;
     if(this->currentItem + counter > 0 && this->currentItem + counter < this->numberOfItems)
-    {
         this->currentItem += counter;
-        std::cout<<"first case\n";
-    }
     else if(this->currentItem + counter < 0)
-    {
         this->currentItem = this->numberOfItems - 1;
-        std::cout<<"second case\n";
-    }
     else
-    {
         this->currentItem = 0;
-        std::cout<<"third case\n";
-    }
 }
 
 void menu::setDisabled(bool value)
